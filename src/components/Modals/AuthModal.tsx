@@ -1,7 +1,8 @@
 import React from "react";
 import { IoClose } from "react-icons/io5";
-import Signup from "./Signup";
+// import Signup from "./Signup";
 // import Login from "./Login";
+import ResetPassword from "./ResetPassword";
 
 // type AuthModalProps = {};
 
@@ -20,7 +21,7 @@ const AuthModal: React.FC = () => {
                 <IoClose className="h-5 w-5" />
               </button>
             </div>
-            <Signup />
+            <ResetPassword />
           </div>
         </div>
       </div>
