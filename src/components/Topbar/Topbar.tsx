@@ -5,7 +5,7 @@ import React from 'react';
     
 // };
 
-const TopBar:React.FC = () => {
+const Topbar:React.FC = () => {
     
     return(
         <nav className='relative flex h-[50px] w-full shrink-0 items-center px-5 bg-dark-layer-1 text-dark-gray-7'>
@@ -33,4 +33,4 @@ const TopBar:React.FC = () => {
 </nav>
     )
 }
-export default TopBar;
+export default Topbar;
