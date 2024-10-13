@@ -1,5 +1,6 @@
 import Link from "next/link";
 import React from "react";
+import Image from "next/image";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "@/firebase/firebase";
 import Logout from "../Buttons/Logout";
@@ -19,7 +20,8 @@ const Topbar: React.FC = () => {
         className={`flex w-full items-center justify-between max-w-[1200px] mx-auto`}
       >
         <Link href="/" className="h-[22px] flex-1">
-          <img src="/logo-full.png" alt="Logo" className="h-full" />
+          {/* <img src="/logo-full.png" alt="Logo" className="h-full" /> */}
+          <Image src="/logo-full.png" alt="Logo" height={100} width={100} />
         </Link>
 
         <div className="flex items-center space-x-4 flex-1 justify-end">
@@ -34,9 +36,16 @@ const Topbar: React.FC = () => {
             </a>
           </div>
           {!user && (
-            <Link href="/auth" onClick={() => {
-              setAuthModalState((prev) => ({ ...prev, isOpen: true, type: "login" }));
-            }}>
+            <Link
+              href="/auth"
+              onClick={() => {
+                setAuthModalState((prev) => ({
+                  ...prev,
+                  isOpen: true,
+                  type: "login",
+                }));
+              }}
+            >
               <button className="bg-dark-fill-3 py-1 px-2 cursor-pointer rounded ">
                 Sign In
               </button>
@@ -44,10 +53,17 @@ const Topbar: React.FC = () => {
           )}
           {user && (
             <div className="cursor-pointer group relative">
-              <img
+              {/* <img
                 src="/avatar.png"
                 alt="user profile img"
                 className="h-8 w-8 rounded-full"
+              /> */}
+              <Image
+                src="/avatar.png"
+                alt="user profile img"
+                height={30}
+                width={30}
+                className="rounded-full"
               />
 
               <div
