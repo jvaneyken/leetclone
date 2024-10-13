@@ -1,4 +1,5 @@
 import Topbar from "@/components/Topbar/Topbar";
+import Workspace from "@/components/Workspace/Workspace";
 import React from "react";
 
 // type ProblemPageProps = {};
@@ -6,6 +7,7 @@ import React from "react";
 const ProblemPage: React.FC = () => {
   return <div>
     <Topbar problemPage />
+    <Workspace />
   </div>;
 };
 export default ProblemPage;
