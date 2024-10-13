@@ -10,7 +10,7 @@ import { useRouter } from "next/router";
 
 const AuthPage: React.FC = () => {
   const authModal = useRecoilValue(authModalState);
-  const [user, loading, error] = useAuthState(auth);
+  const [user, loading] = useAuthState(auth);
   const [pageLoading, setPageLoading] = useState(true);
   const router = useRouter();
 
