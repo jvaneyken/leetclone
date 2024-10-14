@@ -5,7 +5,7 @@ import ProblemDescription from "./ProblemDescription/ProblemDescription";
 
 const Workspace: React.FC = () => {
   return (
-    <Split className="split">
+    <Split className="split" minSize={0}>
       <ProblemDescription />
       <div>Code Editor</div>
     </Split>
