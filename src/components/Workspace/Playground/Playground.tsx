@@ -5,12 +5,13 @@ import CodeMirror from "@uiw/react-codemirror";
 import { vscodeDark } from "@uiw/codemirror-theme-vscode";
 import { javascript } from "@codemirror/lang-javascript";
 import EditorFooter from "./EditorFooter";
-type PlaygroundProps = {};
+import { Problem } from "@/utils/types/problem";
 
-const Playground: React.FC<PlaygroundProps> = () => {
-  const boilerPlate = `function twoSum(nums, target) {
-    // Your Code Here
-};`;
+type PlaygroundProps = {
+  problem: Problem;
+};
+
+const Playground: React.FC<PlaygroundProps> = ({ problem }) => {
   return (
     <div className="flex flex-col bg-dark-layer-1 relative overflow-x-hidden">
       <PreferenceNav />
@@ -23,7 +24,7 @@ const Playground: React.FC<PlaygroundProps> = () => {
       >
         <div className="w-full overflow-auto">
           <CodeMirror
-            value={boilerPlate}
+            value={problem.starterCode}
             theme={vscodeDark}
             extensions={[javascript()]}
             style={{ fontSize: 16 }}
@@ -41,32 +42,18 @@ const Playground: React.FC<PlaygroundProps> = () => {
           </div>
 
           <div className="flex">
-            {/* test case 1 */}
-            <div className="mr-2 items-start mt-2 text-white">
-              <div className="flex flex-wrap items-center gap-y-4">
-                <div className="font-medium items-center transition-all focus:outline-none inline-flex bg-dark-fill-3 hover:bg-dark-fill-2 relative rounded-lg px-4 py-1 cursor-pointer whitespace-nowrap">
-                  Case 1
+            {problem.examples.map((example, index) => (
+              <div
+                className="mr-2 items-start mt-2 text-white"
+                key={example.id}
+              >
+                <div className="flex flex-wrap items-center gap-y-4">
+                  <div className="font-medium items-center transition-all focus:outline-none inline-flex bg-dark-fill-3 hover:bg-dark-fill-2 relative rounded-lg px-4 py-1 cursor-pointer whitespace-nowrap">
+                    Case {index + 1}
+                  </div>
                 </div>
               </div>
-            </div>
-
-            {/* test case 2 */}
-            <div className="mr-2 items-start mt-2 text-white">
-              <div className="flex flex-wrap items-center gap-y-4">
-                <div className="font-medium items-center transition-all focus:outline-none inline-flex bg-dark-fill-3 hover:bg-dark-fill-2 relative rounded-lg px-4 py-1 cursor-pointer whitespace-nowrap">
-                  Case 2
-                </div>
-              </div>
-            </div>
-
-            {/* test case 3 */}
-            <div className="mr-2 items-start mt-2 text-white">
-              <div className="flex flex-wrap items-center gap-y-4">
-                <div className="font-medium items-center transition-all focus:outline-none inline-flex bg-dark-fill-3 hover:bg-dark-fill-2 relative rounded-lg px-4 py-1 cursor-pointer whitespace-nowrap">
-                  Case 3
-                </div>
-              </div>
-            </div>
+            ))}
           </div>
 
           <div className="font-semiBold my-4">
