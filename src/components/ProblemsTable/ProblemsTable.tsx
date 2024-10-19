@@ -1,20 +1,32 @@
 import React, { useEffect, useState } from "react";
-import { problems } from "@/mockProblems/problems";
 import { BsCheckCircle } from "react-icons/bs";
 import Link from "next/link";
 import { AiFillYoutube } from "react-icons/ai";
 import { IoClose } from "react-icons/io5";
 import YouTube from "react-youtube";
+import {
+  collection,
+  orderBy,
+  query,
+  getDocs,
+} from "firebase/firestore";
+import { firestore } from "@/firebase/firebase";
+import { DBProblem } from "@/utils/types/problem";
+// import { useAuthState } from "react-firebase-hooks/auth";
 
-// type ProblemsTableProps = {
+type ProblemsTableProps = {
+  setLoadingProblems: React.Dispatch<React.SetStateAction<boolean>>;
+};
 
-// };
-
-const ProblemsTable: React.FC = () => {
+const ProblemsTable: React.FC<ProblemsTableProps> = ({
+  setLoadingProblems,
+}) => {
   const [youbePlayer, setYoutubePlayer] = useState({
     isOpen: false,
     videoId: "",
   });
+
+  const problems = useGetProblems(setLoadingProblems);
 
   const closeModal = () => {
     setYoutubePlayer({ isOpen: false, videoId: "" });
@@ -33,17 +45,17 @@ const ProblemsTable: React.FC = () => {
   return (
     <>
       <tbody className="text-white">
-        {problems.map((doc, idx) => {
+        {problems.map((problem, idx) => {
           const difficultyColor =
-            doc.difficulty === "Easy"
+            problem.difficulty === "Easy"
               ? "text-dark-green-s"
-              : doc.difficulty === "Medium"
+              : problem.difficulty === "Medium"
               ? "text-dark-yellow"
               : "text-dark-pink";
           return (
             <tr
               className={`${idx % 2 === 1 ? "bg-dark-layer-1" : ""}`}
-              key={doc.id}
+              key={problem.id}
             >
               <th className="px-2 py-4 font-medium whitespace-nowrap text-dark-green-s">
                 <BsCheckCircle fontSize="18" width="18" />
@@ -51,24 +63,24 @@ const ProblemsTable: React.FC = () => {
               <td className="px-6 py-4">
                 <Link
                   className="hover:text-blue-600 cursor-pointer"
-                  href={`/problems/${doc.id}`}
+                  href={`/problems/${problem.id}`}
                 >
-                  {doc.title}
+                  {problem.title}
                 </Link>
               </td>
               <td className={`px-6 py-4 ${difficultyColor}`}>
-                {doc.difficulty}
+                {problem.difficulty}
               </td>
-              <td className="px-6 py-4">{doc.category}</td>
+              <td className="px-6 py-4">{problem.category}</td>
               <td className="px-6 py-4">
-                {doc.videoId ? (
+                {problem.videoId ? (
                   <AiFillYoutube
                     fontSize={"28"}
                     className="cursor-pointer hover:text-red-600"
                     onClick={() =>
                       setYoutubePlayer({
                         isOpen: true,
-                        videoId: doc.videoId as string,
+                        videoId: problem.videoId as string,
                       })
                     }
                   />
@@ -108,3 +120,30 @@ const ProblemsTable: React.FC = () => {
   );
 };
 export default ProblemsTable;
+
+function useGetProblems(
+  setLoadingProblems: React.Dispatch<React.SetStateAction<boolean>>
+) {
+  const [problems, setProblems] = useState<DBProblem[]>([]);
+
+  useEffect(() => {
+    const getProblems = async () => {
+      // fetching data logic
+      setLoadingProblems(true);
+      const q = query(
+        collection(firestore, "problems"),
+        orderBy("order", "asc")
+      );
+      const querySnapshot = await getDocs(q);
+      const tmp: DBProblem[] = [];
+      querySnapshot.forEach((doc) => {
+        tmp.push({ id: doc.id, ...doc.data() } as DBProblem);
+      });
+      setProblems(tmp);
+      setLoadingProblems(false);
+    };
+
+    getProblems();
+  }, [setLoadingProblems]);
+  return problems;
+}
